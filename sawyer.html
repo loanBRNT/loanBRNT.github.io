@@ -142,15 +142,23 @@
                 <li><strong>Category</strong>: Robotics</li>
                 <li><strong>Language</strong>: Python, ROS, Javascript</li>
                 <li><strong>Project date</strong>: april 2023 - july 2023</li>
-                <li><strong>Current Version in video</strong>:<a href="https://youtu.be/8MbCvps2-aU">Youtube</a></li>
+                <li><strong>Latest Version in video</strong>:<a href="https://youtu.be/Euf1ZaoABLU">Youtube</a></li>
               </ul>
             </div>
             <div class="portfolio-description">
               <h2>Introduction</h2>
               <p>During my internship at Ostfalia (Wolfenbüttel, Germany) - University Of Applied Sciences, I had to program an application for <a href="https://www.rethinkrobotics.com/sawyer">Sawyer robot</a> to transform it into a bartender. It had to work with robotics waiters (<a href="https://www.aldebaran.com/en/pepper">Pepper robot</a>) and perform some of classical actions of a bartender: recognize an order, opening bottles, serving cocktails in glasses</p>
-              <h2>Work</h2>
+              <h2>Application Basis</h2>
               <p>
-                Comming soon
+                To use Node-Red to command the Sawyer, I needed to create 3 docker containers : the first one for the node-red part, the second one is for the ROS environment and scripts, the last one is a rest-server to make the communication between the two first. More information in my technical note / report (link comming soon)
+              </p>
+              <h2>Fixed Position <a href="https://youtu.be/8MbCvps2-aU">V1.5</a></h2>
+              <p>
+                This version assumes that plastic cups and bottles are always placed in the same place every time. Results are satisfaying. An order is prepared in 1 minute with 100% accuracity (taking/pouring).
+              </p>
+              <h2>Object Detection with Yolov5<a href="https://youtu.be/Euf1ZaoABLU">V2.0</a></h2>
+              <p>
+                I used Yolov5 to train models with my own datassets labelled with RobotFlow. I integrated this model directly in my ROS scripts to allow the robot to adapt its trajectory in real time. You can find this on <a href="https://github.com/loanBRNT/sawyer_vision_bartender">my github repository</a>
               </p>
             </div>
           </div>
