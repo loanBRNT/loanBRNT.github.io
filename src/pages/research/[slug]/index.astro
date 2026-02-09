@@ -1,0 +1,148 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { render, getCollection, type CollectionEntry } from 'astro:content';
+import Breadcrumbs from '@/components/Breadcrumbs.svelte';
+import SocialShare from '@/components/SocialShare.svelte';
+import { getBreadcrumbSchema } from '@/lib/schemas';
+import { formatDate } from '@/lib/utils/date';
+
+export async function getStaticPaths() {
+  const researchProjects = await getCollection('research');
+  return researchProjects
+    .filter((project) => !project.data.directLink)
+    .map((project: CollectionEntry<'research'>) => ({
+      params: { slug: project.id },
+      props: project,
+    }));
+}
+
+type Props = CollectionEntry<'research'>;
+
+const project = Astro.props as Props;
+const { Content } = await render(project);
+
+const schema = getBreadcrumbSchema([
+  { name: 'Research', url: new URL('/research', Astro.site).toString() },
+  { name: project.data.title, url: new URL(Astro.url.pathname, Astro.site).toString() },
+]);
+
+const formatRange = (start?: Date, end?: Date) => {
+  if (!start && !end) return null;
+  if (start && !end) return `${formatDate(start)} - Present`;
+  if (!start && end) return formatDate(end);
+  return `${formatDate(start)} - ${formatDate(end)}`;
+};
+
+const dateRange = formatRange(project.data.startDate, project.data.endDate);
+---
+
+<Layout title={project.data.title} description={project.data.description} schema={schema}>
+  <Breadcrumbs
+    items={[
+      { name: 'Research', href: '/research' },
+      { name: project.data.title, href: '#' },
+    ]}
+  />
+
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-12">
+      <header class="flex flex-col gap-6">
+        <div class="flex flex-wrap items-center gap-3">
+          <span
+            class={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${
+              project.data.status === 'ongoing'
+                ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
+                : project.data.status === 'under review'
+                  ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                  : project.data.status === 'completed'
+                    ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30'
+                    : 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20'
+            }`}
+          >
+            {project.data.status === 'under review'
+              ? 'Under Review'
+              : project.data.status}
+          </span>
+          {dateRange && (
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              {dateRange}
+            </span>
+          )}
+        </div>
+
+        <h1 class="text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+          {project.data.title}
+        </h1>
+
+        <p
+          class="text-lg sm:text-xl text-muted-foreground leading-relaxed border-l-4 border-primary/30 pl-6 py-2"
+        >
+          {project.data.description}
+        </p>
+
+        {project.data.collaborators.length > 0 && (
+          <p class="text-sm text-muted-foreground">
+            <span class="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              Collaborators
+            </span>
+            <span class="ml-2">{project.data.collaborators.join(', ')}</span>
+          </p>
+        )}
+
+        <div class="flex flex-wrap gap-3">
+          {project.data.tags.map((tag) => (
+            <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-secondary border border-border text-foreground">
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div class="flex flex-wrap gap-4 pt-4 border-t border-border">
+          {project.data.link && (
+            <a
+              href={project.data.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors no-underline"
+            >
+              Visit Project website
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <>
+                  <path d="M7 7h10v10" />
+                  <path d="M7 17 17 7" />
+                </>
+              </svg>
+            </a>
+          )}
+
+          {project.data.links.map((link) => (
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-secondary border border-border hover:bg-accent transition-colors no-underline"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </header>
+    </div>
+
+    <article class="prose max-w-none mt-12 mb-16">
+      <Content />
+    </article>
+
+    <SocialShare client:load title={project.data.title} urlPath={Astro.url.pathname} />
+  </div>
+</Layout>
