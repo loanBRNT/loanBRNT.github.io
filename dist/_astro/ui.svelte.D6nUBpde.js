@@ -1,0 +1,1 @@
+import{z as e}from"./template.ClfEEacE.js";const a=e({isSearchOpen:!1,toggleSearch(){this.isSearchOpen=!this.isSearchOpen},openSearch(){this.isSearchOpen=!0},closeSearch(){this.isSearchOpen=!1}});export{a as u};

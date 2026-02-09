@@ -1,0 +1,76 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+import Breadcrumbs from '@/components/Breadcrumbs.svelte';
+import { SITE } from '@/config';
+import { getBreadcrumbSchema } from '@/lib/schemas';
+
+const schema = getBreadcrumbSchema([
+  { name: 'Publications', url: new URL('/publications', Astro.site).toString() },
+]);
+
+const pages = await getCollection('publicationsPage');
+const page = pages[0];
+
+if (!page) {
+  throw new Error('Missing publications content at site/content/publications/index.md');
+}
+
+const { Content } = await render(page);
+const pageTitle = page.data.title || 'Publications';
+const pageDescription = page.data.description || SITE.publicationsDescription;
+---
+
+<Layout title={pageTitle} description={pageDescription} schema={schema}>
+  <Breadcrumbs items={[{ name: 'Publications', href: '/publications' }]} />
+
+  <div class="mb-12 sm:mb-16 lg:mb-20">
+    <h1
+      class="text-3xl sm:text-4xl lg:text-5xl 3xl:text-6xl font-black tracking-tight text-foreground leading-[1.1]"
+    >
+      {pageTitle}
+    </h1>
+    {pageDescription && (
+      <p class="mt-4 text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl leading-relaxed">
+        {pageDescription}
+      </p>
+    )}
+  </div>
+
+  <article class="publications prose max-w-none">
+    <Content />
+  </article>
+</Layout>
+
+<style>
+  .publications :global(.pub-button) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-muted-foreground);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .publications :global(.pub-button:hover) {
+    color: var(--color-foreground);
+    background: var(--color-accent);
+    border-color: var(--color-border);
+  }
+
+  .publications :global(li) {
+    margin-bottom: 1.5rem;
+  }
+
+  .publications :global(li p) {
+    margin: 0.2rem 0;
+  }
+</style>
