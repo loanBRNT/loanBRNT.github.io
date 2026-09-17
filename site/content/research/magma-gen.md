@@ -47,15 +47,21 @@ This counterfactual re-execution step is important because the diagnosis itself 
 
 > I do not trust the LLM, I trust the result.
 
-## What MAGMA-GEN is
+## How you can use MAGMA-GEN
 
-MAGMA-GEN is an on-policy data-generation pipeline: it collects training examples from the states and failures produced by the agent itself.
+MAGMA-GEN is designed to help you improve your own robotic agent from its execution experience.
 
-When a rollout fails, the coach analyzes the trajectory and proposes a correction. The agent then continues execution from that point. The resulting example is retained only if the proposed recovery successfully resolves the targeted subgoal.
+You provide an agent, a set of tasks, and an environment in which its actions can be executed. This environment can be a simulator or a real robotic system, as long as MAGMA-GEN can observe the outcome of the agent's decisions.
 
-The validated data can then be used for supervised training, without updating the agent's weights during the collection process itself.
+The agent is then allowed to perform the tasks with its current policy. When something goes wrong, MAGMA-GEN uses a privileged coach to identify a possible cause, propose a recovery, and test that recovery through execution. Only validated corrections are turned into training examples.
 
-We evaluate MAGMA-GEN on interactive, long-horizon manipulation tasks and compare it with distillation and trajectory-repair baselines. Our experiments study task success and recovery under evolving constraints, both in simulation and through real-robot execution.
+This gives you a simple training loop:
+
+Run your agent → observe its failures → generate validated corrections → fine-tune → run again.
+
+Unlike reinforcement-learning approaches, MAGMA-GEN does not require the model to be updated during data collection or every trajectory to be converted into a reward signal. The output is a supervised dataset that can be inspected, filtered, reused, and combined with your existing training data.
+
+The framework was built with robotics in mind: long-horizon tasks, stochastic execution, asynchronous actions, execution failures, and agents interacting with the physical world. We evaluate it in both simulation and on a real robot, but the same pipeline can be connected to other task-level robotic agents and environments.
 
 ## A broader research project
 
