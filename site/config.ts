@@ -61,11 +61,11 @@ export const SITE: SiteConfig = {
   ogImage: "og.png",
   lang: "en-US",
   base: "/",
-  website: "https://github.com/loanBRNT",
+  website: "https://loanbrnt.github.io",
   social: {
     github: "https://github.com/loanBRNT",
     linkedin: "https://www.linkedin.com/in/loan-bernat-928b9a1b0/",
-    youtube: "https://www.youtube.com/@loanbernat8145",
+    youtube: "https://www.youtube.com/@loanbernat01",
   },
   googleAnalyticsId: "", // Example: 'G-XXXXXXXXXX'
   homeHeroDescription:

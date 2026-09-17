@@ -72,6 +72,8 @@ const formatRange = (start?: Date, end?: Date) => {
                         ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
                         : project.data.status === 'under review'
                           ? 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30'
+                          : project.data.status === 'accepted'
+                            ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30'
                           : project.data.status === 'completed'
                             ? 'bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30'
                             : 'bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20'
@@ -79,6 +81,8 @@ const formatRange = (start?: Date, end?: Date) => {
                   >
                     {project.data.status === 'under review'
                       ? 'Under Review'
+                      : project.data.status === 'accepted'
+                        ? 'Accepted at CoRL 2026'
                       : project.data.status}
                   </span>
                 </div>

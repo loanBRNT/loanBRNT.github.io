@@ -4,4 +4,4 @@
 
 My work focuses on building real systems that can understand and interact with the world in a human-like manner.
 
-I also share some projects on **Youtube** to make robotics and Artificial Intelligence more accessible.
+I also share some projects on **[YouTube](https://www.youtube.com/@loanbernat01)** to make robotics and Artificial Intelligence more accessible.

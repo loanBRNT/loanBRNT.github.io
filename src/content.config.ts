@@ -28,7 +28,7 @@ const research = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    status: z.enum(['ongoing', 'under review', 'completed']).default('ongoing'),
+    status: z.enum(['ongoing', 'under review', 'accepted', 'completed']).default('ongoing'),
     startDate: z.date().optional(),
     endDate: z.date().optional(),
     tags: z.array(z.string()).default([]),
